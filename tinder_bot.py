@@ -25,12 +25,12 @@ class TinderBot():
         sleep(5)
 
         # Confirmation cells
-        cell_1 = bot.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[1]')
-        cell_2 = bot.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[2]')
-        cell_3 = bot.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[3]')
-        cell_4 = bot.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[4]')
-        cell_5 = bot.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[5]')
-        cell_6 = bot.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[6]')
+        cell_1 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[1]')
+        cell_2 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[2]')
+        cell_3 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[3]')
+        cell_4 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[4]')
+        cell_5 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[5]')
+        cell_6 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[6]')
 
         cell_1.send_keys(confirmation_code[0])
         cell_2.send_keys(confirmation_code[1])
@@ -41,6 +41,9 @@ class TinderBot():
 
         continue_btn = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/button')
         continue_btn.click()
+
+    def like(self):
+        like_btn = self.driver.find
 
 
 
