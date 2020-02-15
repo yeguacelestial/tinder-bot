@@ -42,8 +42,26 @@ class TinderBot():
         continue_btn = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/button')
         continue_btn.click()
 
+        sleep(5)
+
+        allow_btn = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/button[1]/span')
+        allow_btn.click()
+
+        sleep(2)
+
+        not_interested_btn = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/button[2]/span')
+        not_interested_btn.click()
+        sleep(5)
+
     def like(self):
-        like_btn = self.driver.find
+        while True:
+            like_btn = self.driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/button[3]/span/svg/path')
+            like_btn.click()
+            sleep(3)
+
+bot = TinderBot()
+bot.login()
+bot.like()
 
 
 
