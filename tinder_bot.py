@@ -1,67 +1,92 @@
+import os
+import random
+
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from time import sleep
-from data import phone_number, confirmation_code
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def random_delay():
+    return random.randint(4,14)
 
 class TinderBot():
 
     def __init__(self):
-        self.driver = webdriver.Firefox()
+        self.driver = webdriver.Chrome()
+    
+    def get_driver(self):
+        return self.driver
 
     def login(self):
-        self.driver.get('http://tinder.com')
+        driver = self.driver
 
-        sleep(5)
+        driver.get('http://tinder.com')
 
-        phone_number_btn = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/div[1]/button')
-        phone_number_btn.click()
-        sleep(5)
+        # Accept terms
+        driver.find_element_by_xpath('//*[@id="t-1801132545"]/div/div[2]/div/div/div[1]/button').click()
+        sleep(random_delay())
 
-        # Phone input
-        phone_input = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[2]/div/input')
-        phone_input.send_keys(phone_number)
+        # Login button
+        driver.find_element_by_xpath('//*[@id="t-1801132545"]/div/div[1]/div/main/div[1]/div/div/div/div/header/div/div[2]/div[2]/button').click()
+        sleep(random_delay())
 
-        continue_btn = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/button/span')
-        continue_btn.click()
-        sleep(5)
+        # Login with phone number
+        driver.find_element_by_xpath('//*[@id="t--239073259"]/div/div/div[1]/div/div[3]/span/div[3]/button').click()
+        sleep(random_delay())
 
-        # Confirmation cells
-        cell_1 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[1]')
-        cell_2 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[2]')
-        cell_3 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[3]')
-        cell_4 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[4]')
-        cell_5 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[5]')
-        cell_6 = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div[3]/input[6]')
+        # Try to wait for captcha modal to appear...
+        try:
+            WebDriverWait(driver, 200).until(
+                EC.invisibility_of_element_located((By.ID, "arkoseInlineAnchor"))
+            )
+        except:
+            pass
+        
+        # Introduce phone number
+        driver.find_element_by_xpath('//*[@id="t--239073259"]/div/div/div[1]/div[2]/div/input').send_keys(os.getenv('PHONE_NUMBER'))
+        sleep(random_delay())
 
-        cell_1.send_keys(confirmation_code[0])
-        cell_2.send_keys(confirmation_code[1])
-        cell_3.send_keys(confirmation_code[2])
-        cell_4.send_keys(confirmation_code[3])
-        cell_5.send_keys(confirmation_code[4])
-        cell_6.send_keys(confirmation_code[5])
+        # Button "send sms"
+        driver.find_element_by_xpath('//*[@id="t--239073259"]/div/div/div[1]/button').click()
+        sleep(random_delay())
 
-        continue_btn = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/button')
-        continue_btn.click()
+        # Ask for phone code
+        sms_code = input("SMS Code: ")
 
-        sleep(5)
+        # SMS code inputs on each case
+        for i in range(0,6):
+            driver.find_element_by_xpath(f'//*[@id="t--239073259"]/div/div/div[1]/div[3]/input[{i+1}]').send_keys(sms_code[i])
 
-        allow_btn = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/button[1]/span')
-        allow_btn.click()
+        sleep(random_delay())
 
-        sleep(2)
+        # Continue button
+        driver.find_element_by_xpath('//*[@id="t--239073259"]/div/div/div[1]/button').click()
+        sleep(random_delay())
 
-        not_interested_btn = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/button[2]/span')
-        not_interested_btn.click()
-        sleep(5)
+        # Email code handling
+        email_code = input("Email code: ")
 
-    def like(self):
-        while True:
-            like_btn = self.driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/button[3]/span/svg/path')
-            like_btn.click()
-            sleep(3)
+        for i in range(0,6):
+            driver.find_element_by_xpath(f'//*[@id="t--239073259"]/div/div/div[1]/div[3]/input[{i+1}]').send_keys(email_code[i])
+        
+        sleep(random_delay())
 
-bot = TinderBot()
-bot.login()
-bot.like()
+        # Next button
+        driver.find_element_by_xpath('//*[@id="t--239073259"]/div/div/div[1]/button').click()
+        sleep(random_delay())
 
+        # Try to accept notifications and stuff
+        try:
+            driver.find_element_by_xpath('//*[@id="t--239073259"]/div/div/div/div/div[3]/button[1]').click()
+            sleep(random_delay())
+            
+            driver.find_element_by_xpath('//*[@id="t--239073259"]/div/div/div/div/div[3]/button[2]').click()
+            sleep(random_delay())
 
-
+        except:
+            pass
