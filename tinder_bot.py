@@ -166,12 +166,19 @@ class TinderBot():
         # UPGRADE YOUR LIKE - You just liked a popular profile...'No thanks' button
         upgrade_like_nothanks_xpath = '/html/body/div[2]/div/div/button[2]'
 
+        # Add Tinder to your home screen - No thanks
+        homescreen_nothanks_xpath = f'//*[@id="{self.alert_div_id}"]/div/div/div[2]/button[2]/span'
+
         if self.element_exists_by_xpath(passport_alert_nothanks_xpath):
             driver.find_element_by_xpath(passport_alert_nothanks_xpath).click()
             sleep(random_delay())
 
         elif self.element_exists_by_xpath(upgrade_like_nothanks_xpath):
             driver.find_element_by_xpath(upgrade_like_nothanks_xpath).click()
+            sleep(random_delay())
+
+        elif self.element_exists_by_xpath(homescreen_nothanks_xpath):
+            driver.find_element_by_xpath(homescreen_nothanks_xpath).click()
             sleep(random_delay())
 
         else:
